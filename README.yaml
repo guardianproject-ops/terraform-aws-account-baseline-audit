@@ -7,7 +7,10 @@ description: Terraform module for bringing an AWS Control Tower Audit account in
 introduction: |-
 
   This module should be used on Audit accounts created by Control Tower.
-  It sets up a security and alerting baseline.
+  It sets up the following features:
+
+    - Guard Duty for the entire AWS Org (You must run the corresponding root account baseline module first!)
+    - Our general account baseline
 
 usage: |-
 

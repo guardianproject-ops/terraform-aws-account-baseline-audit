@@ -1,12 +1,27 @@
-variable "guardduty_enabled" {
-  type        = bool
-  default     = true
-  description = <<-DOC
-  Whether to enable GuardDuty in the AWS Organization.
-DOC
-}
+#variable "guardduty_admin_account_id" {
+#  description = "The AWS account ID of the GuardDuty delegated admin/master account"
+#  type        = string
+#  default     = null
+#}
+#------------
+#
+#variable "account_map_tenant" {
+#  type        = string
+#  default     = "core"
+#  description = "The tenant where the `account_map` component required by remote-state is deployed"
+#}
+#
+#variable "admin_delegated" {
+#  type        = bool
+#  default     = false
+#  description = <<DOC
+#  A flag to indicate if the AWS Organization-wide settings should be created. This can only be done after the GuardDuty
+#  Administrator account has already been delegated from the AWS Org Management account (usually 'root'). See the
+#  Deployment section of the README for more information.
+#  DOC
+#}
 
-variable "guardduty_auto_enable_organization_members" {
+variable "auto_enable_organization_members" {
   type        = string
   default     = "ALL"
   description = <<-DOC
@@ -18,7 +33,7 @@ variable "guardduty_auto_enable_organization_members" {
 
 }
 
-variable "guardduty_cloudwatch_event_rule_pattern_detail_type" {
+variable "cloudwatch_event_rule_pattern_detail_type" {
   type        = string
   default     = "GuardDuty Finding"
   description = <<-DOC
@@ -31,7 +46,7 @@ variable "guardduty_cloudwatch_event_rule_pattern_detail_type" {
   DOC
 }
 
-variable "guardduty_create_sns_topic" {
+variable "create_sns_topic" {
   type        = bool
   default     = false
   description = <<-DOC
@@ -40,7 +55,19 @@ variable "guardduty_create_sns_topic" {
   DOC
 }
 
-variable "guardduty_cloudwatch_enabled" {
+#variable "delegated_admininstrator_component_name" {
+#  type        = string
+#  default     = "guardduty/delegated-administrator"
+#  description = "The name of the component that created the GuardDuty detector."
+#}
+#
+#variable "delegated_administrator_account_name" {
+#  type        = string
+#  default     = "core-security"
+#  description = "The name of the account that is the AWS Organization Delegated Administrator account"
+#}
+
+variable "cloudwatch_enabled" {
   type        = bool
   default     = false
   description = <<-DOC
@@ -48,7 +75,7 @@ variable "guardduty_cloudwatch_enabled" {
   DOC
 }
 
-variable "guardduty_finding_publishing_frequency" {
+variable "finding_publishing_frequency" {
   type        = string
   default     = null
   description = <<-DOC
@@ -63,7 +90,7 @@ variable "guardduty_finding_publishing_frequency" {
   DOC
 }
 
-variable "guardduty_findings_notification_arn" {
+variable "findings_notification_arn" {
   default     = null
   type        = string
   description = <<-DOC
@@ -73,7 +100,13 @@ variable "guardduty_findings_notification_arn" {
   DOC
 }
 
-variable "guardduty_kubernetes_audit_logs_enabled" {
+#variable "global_environment" {
+#  type        = string
+#  default     = "gbl"
+#  description = "Global environment name"
+#}
+
+variable "kubernetes_audit_logs_enabled" {
   type        = bool
   default     = false
   description = <<-DOC
@@ -84,7 +117,7 @@ variable "guardduty_kubernetes_audit_logs_enabled" {
   DOC
 }
 
-variable "guardduty_malware_protection_scan_ec2_ebs_volumes_enabled" {
+variable "malware_protection_scan_ec2_ebs_volumes_enabled" {
   type        = bool
   default     = false
   description = <<-DOC
@@ -92,10 +125,36 @@ variable "guardduty_malware_protection_scan_ec2_ebs_volumes_enabled" {
 
   For more information, see:
   https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_detector#malware-protection
-DOC
+  DOC
 }
 
-variable "guardduty_s3_protection_enabled" {
+#variable "organization_management_account_name" {
+#  type        = string
+#  default     = null
+#  description = "The name of the AWS Organization management account"
+#}
+#
+#variable "privileged" {
+#  type        = bool
+#  default     = false
+#  description = "true if the default provider already has access to the backend"
+#}
+
+#variable "region" {
+#  type        = string
+#  description = "AWS Region"
+#}
+
+#variable "root_account_stage" {
+#  type        = string
+#  default     = "root"
+#  description = <<-DOC
+#  The stage name for the Organization root (management) account. This is used to lookup account IDs from account names
+#  using the `account-map` component.
+#  DOC
+#}
+
+variable "s3_protection_enabled" {
   type        = bool
   default     = true
   description = <<-DOC
@@ -106,7 +165,7 @@ variable "guardduty_s3_protection_enabled" {
   DOC
 }
 
-variable "guardduty_subscribers" {
+variable "subscribers" {
   type = map(object({
     protocol               = string
     endpoint               = string
@@ -134,7 +193,7 @@ variable "guardduty_subscribers" {
   DOC
 }
 
-variable "guardduty_detector_features" {
+variable "detector_features" {
   type = map(object({
     feature_name = string
     status       = string
