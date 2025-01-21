@@ -10,15 +10,35 @@ introduction: |-
   It sets up the following features:
 
     - Guard Duty for the entire AWS Org (You must run the corresponding root account baseline module first!)
-    - Our general account baseline
+    - Security Hub for the entire AWS Org
+    - IAM user usage alerts 
+    - IAM Access Analyzer for the entire AWS Org
+
+
+  You must run our [terraform-aws-account-baseline-root](https://gitlab.com/guardianproject-ops/terraform-aws-account-baseline-root) module first to setup administrator delegation for many of the services.
 
 usage: |-
 
-  You can use the [`generate_imports.py`](./generate_imports.py) script to generate child_accounts and imports for your existing AWS Org.
+  To apply the account level baselines use:
 
   ```terraform
-  module "module" {
-    source = "git::https://gitlab.com/guardianproject-ops/terraform-aws-account-baseline-root?ref=main"
+  module "audit" {
+    source                   = "git::https://gitlab.com/guardianproject-ops/terraform-aws-account-baseline-audit?ref=main"
+    guardduty_enabled        = var.guardduty_enabled
+    governed_regions         = var.governed_regions
+    aws_organization_root_id = var.aws_organization_root_id
+    management_account_id    = var.management_account_id
+    logging_account_id       = var.logging_account_id
+    context                  = module.this.context
+  }
+  ```
+
+  Then for each region where you want the IAM Access Analyzer to be enabled, run the following with a provider in each region:
+
+  ```terraform
+  module "audit_baseline_region" {
+    source           = "git::https://gitlab.com/guardianproject-ops/terraform-aws-account-baseline-audit//modules/iam-access-analzyer-region?ref=main"
+    context          = module.this.context
   }
   ```
 
