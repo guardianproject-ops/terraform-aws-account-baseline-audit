@@ -3,8 +3,7 @@ data "aws_caller_identity" "audit" {}
 locals {
   security_hub_standards_arns_default = [
     "arn:aws:securityhub:${data.aws_region.current.name}::standards/aws-foundational-security-best-practices/v/1.0.0",
-    "arn:aws:securityhub:${data.aws_region.current.name}::standards/cis-aws-foundations-benchmark/v/1.4.0",
-    "arn:aws:securityhub:${data.aws_region.current.name}::standards/pci-dss/v/3.2.1"
+    "arn:aws:securityhub:${data.aws_region.current.name}::standards/cis-aws-foundations-benchmark/v/1.4.0"
   ]
 
   security_hub_standards_arns = var.aws_security_hub.standards_arns != null ? var.aws_security_hub.standards_arns : local.security_hub_standards_arns_default
